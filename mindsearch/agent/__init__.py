@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 
 from lagent.actions import ActionExecutor, BingBrowser
+from lagent.lagent.actions import ActionExecutor, PdfBrowser
 
 import mindsearch.agent.models as llm_factory
 from mindsearch.agent.mindsearch_agent import (MindSearchAgent,
