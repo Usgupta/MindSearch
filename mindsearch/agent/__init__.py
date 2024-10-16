@@ -1,8 +1,8 @@
 import os
 from datetime import datetime
 
-from lagent.actions import ActionExecutor, BingBrowser
-from lagent.lagent.actions import ActionExecutor, PdfBrowser
+from lagent.actions import ActionExecutor, BingBrowser, PdfBrowser
+# from lagent.lagent.actions import ActionExecutor, BingBrowser
 
 import mindsearch.agent.models as llm_factory
 from mindsearch.agent.mindsearch_agent import (MindSearchAgent,
@@ -44,7 +44,7 @@ def init_agent(lang='cn', model_format='internlm_server',search_engine='DuckDuck
         searcher_cfg=dict(
             llm=llm,
             plugin_executor=ActionExecutor(
-                BingBrowser(searcher_type=search_engine,
+                PdfBrowser(searcher_type=search_engine,
                             topk=6,
                             api_key=os.environ.get('WEB_SEARCH_API_KEY',
                                                    'YOUR WEB SEARCH ENGINE API'))),

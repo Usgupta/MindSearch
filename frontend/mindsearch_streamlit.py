@@ -66,7 +66,7 @@ if 'queries' not in st.session_state:
 
 # Set up page layout
 st.set_page_config(layout='wide')
-st.title('MindSearch-思索')
+st.title('MindSearch')
 
 
 # Function to update chat
