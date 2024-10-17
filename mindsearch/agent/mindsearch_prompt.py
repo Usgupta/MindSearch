@@ -18,7 +18,7 @@ searcher_system_prompt_cn = """## 人物简介
 """
 
 searcher_system_prompt_en = """## Character Introduction
-You are an intelligent assistant that can call web search tools. Please collect information and reply to the question based on the current problem. You can use the following tools:
+You are an intelligent assistant that can call file search tools. Please collect information and reply to the question based on the current problem. You can use the following tools:
 {tool_info}
 ## Reply Format
 
@@ -49,10 +49,10 @@ fewshot_example_en = """
 
 ### search
 When I want to search for "What season is Honor of Kings now", I will operate in the following format:
-Now it is 2024, so I should search for the keyword of the Honor of Kings<|action_start|><|plugin|>{{"name": "FastWebBrowser.search", "parameters": {{"query": ["Honor of Kings Season", "season for Honor of Kings in 2024"]}}}}<|action_end|>
+Now it is 2024, so I should search for the keyword of the Honor of Kings<|action_start|><|plugin|>{{"name": "PdfBrowser.search", "parameters": {{"query": ["Honor of Kings Season", "season for Honor of Kings in 2024"]}}}}<|action_end|>
 
 ### select
-In order to find the strongest shooters in Honor of Kings in season s36, I needed to look for web pages that mentioned shooters in Honor of Kings in season s36. After an initial browse of the web pages, I found that web page 0 mentions information about Honor of Kings in s36 season, but there is no specific mention of information about the shooter. Webpage 3 mentions that “the strongest shooter in s36 has appeared?”, which may contain information about the strongest shooter. Webpage 13 mentions “Four T0 heroes rise, archer's glory”, which may contain information about the strongest archer. Therefore, I chose webpages 3 and 13 for further reading.<|action_start|><|plugin|>{{"name": "FastWebBrowser.select", "parameters": {{"index": [3, 13]}}}}<|action_end|>
+In order to find the strongest shooters in Honor of Kings in season s36, I needed to look for pdf pages that mentioned shooters in Honor of Kings in season s36. After an initial browse of the pdf pages, I found that pdf page 0 mentions information about Honor of Kings in s36 season, but there is no specific mention of information about the shooter. Pdf page 3 of a particular file mentions that “the strongest shooter in s36 has appeared?”, which may contain information about the strongest shooter. PdfPage 13 of a particular file mentions “Four T0 heroes rise, archer's glory”, which may contain information about the strongest archer. Therefore, I chose file pages 3 and 13 for further reading.<|action_start|><|plugin|>{{"name": "PdfBrowser.select", "parameters": {{"index": [3, 13]}}}}<|action_end|>
 """
 
 searcher_input_template_en = """## Final Problem
@@ -189,7 +189,7 @@ Below is the API documentation for the WebSearchGraph class, including detailed 
 
 ### Class: WebSearchGraph
 
-This class manages nodes and edges of a web search graph and conducts searches via a web proxy.
+This class manages nodes and edges of a pdf search graph and conducts searches on pdf files.
 
 #### Initialization Method
 

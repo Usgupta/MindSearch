@@ -320,7 +320,7 @@ class MindSearchAgent(BaseAgent):
             if ref_results:
                 ref_results = json.loads(ref_results)
                 ref2url = {
-                    idx: item['url']
+                    idx: item['filename']
                     for idx, item in ref_results.items()
                 }
 
