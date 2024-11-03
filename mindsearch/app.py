@@ -3,16 +3,22 @@ import json
 import logging
 from copy import deepcopy
 from dataclasses import asdict
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 
 import janus
-from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from lagent.schema import AgentStatusCode
-from pydantic import BaseModel
 from sse_starlette.sse import EventSourceResponse
 
+from fastapi import FastAPI, UploadFile, File, Form, Depends, HTTPException
+from pydantic import BaseModel, ValidationError
+from fastapi.encoders import jsonable_encoder
+
 from mindsearch.agent import init_agent
+
+
+from json import JSONDecodeError
+import ast
 
 
 def parse_arguments():
@@ -40,13 +46,64 @@ app.add_middleware(CORSMiddleware,
                    allow_headers=['*'])
 
 
+def checker(data: str = Form(...)):
+    try:
+       return json.loads(data)
+    except JSONDecodeError:
+        raise HTTPException(status_code=400, detail='Invalid JSON data')
+
+
+
 class GenerationParams(BaseModel):
     inputs: Union[str, List[Dict]]
     agent_cfg: Dict = dict()
+    
 
+# def parse_json(data: str = Form(...)):
+#     try:
+#         return GenerationParams.model_validate_json(data)
+#     except ValidationError as e:
+#         raise HTTPException(
+#             detail=jsonable_encoder(e.errors()),
+#             status_code=422,
+#         )
+
+# @app.post("/submit1")
+# def submit(
+#     name: str = Form(...),
+#     point: float = Form(...),
+#     is_accepted: bool = Form(...),
+#     inputs: List = Form(...),
+#     files: List[UploadFile] = File(...),
+# ):
+#     return {
+#         "JSON Payload": {"name": name, "point": point, "is_accepted": is_accepted,"inputs":inputs},
+#         "Filenames": [file.filename for file in files],
+#     }
 
 @app.post('/solve')
-async def run(request: GenerationParams):
+async def run(
+    inputs: List = Form(...),
+    files: List[UploadFile] = File(...),):
+    
+    print({
+        "JSON Payload": {"inputs":inputs},
+        "Filenames": [file.filename for file in files],
+    })
+    
+    print(type(inputs))
+    
+    print(inputs)
+    
+    inputs_json = ast.literal_eval(inputs[0])
+    
+    inputs[0] = inputs_json
+    
+    # print(inputs_json)
+    
+    # print({"inputs": params.inputs,
+    #     "agent_cfg": params.agent_cfg,
+    #     "filenames": [file.filename for file in files]})
 
     def convert_adjacency_to_tree(adjacency_input, root_name):
 
@@ -126,8 +183,9 @@ async def run(request: GenerationParams):
             queue.close()
             await queue.wait_closed()
 
-    inputs = request.inputs
-    agent = init_agent(lang=args.lang, model_format=args.model_format,search_engine=args.search_engine)
+    inputs = inputs
+
+    agent = init_agent(lang=args.lang, model_format=args.model_format,search_engine=args.search_engine,files=files)
     return EventSourceResponse(generate())
 
 

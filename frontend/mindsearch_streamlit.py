@@ -70,27 +70,59 @@ st.title('MindSearch')
 
 
 # Function to update chat
-def update_chat(query):
+# Function to update chat
+def update_chat(query, files):
     with st.chat_message('user'):
         st.write(query)
     if query not in st.session_state['queries']:
-        # Mock data to simulate backend response
-        # response, history, nodes, adjacency_list
         st.session_state['queries'].append(query)
         st.session_state['responses'].append([])
         history = None
-        # 暂不支持多轮
         message = [dict(role='user', content=query)]
+        
+        # print(message)
+        
+        # [{'role': 'user', 'content': 'sdfd'}]
 
         url = 'http://localhost:8002/solve'
-        headers = {'Content-Type': 'application/json'}
-        data = {'inputs': message}
-        raw_response = requests.post(url,
-                                     headers=headers,
-                                     data=json.dumps(data),
-                                     timeout=20,
-                                     stream=True)
+        # url = 'http://localhost:8002/submit1'
+        # headers = {'Content-Type': 'multipart/form-data'}
+        
+        headers ={'Content-Type': 'application/json'}
+        # 
+        # data={"inputs": "what is the best ", "agent_cfg": {"key1": "value1"}}
+        # data = {'inputs': message}
+        
+        
+        
+        data = {'inputs': [{'role': 'user', 'content': 'what is the best diverstion strategy'}]}
+        
+        # data = {"name": "foo", "point": 0.13, "is_accepted": False, "inputs": [{'role': 'user', 'content': 'sdfd'}]}
+        
+        # print(data)
+        
+        files = {
+    'files': open('/home/umang_gupta/mindsearch-pdf/SIA OM diversion strat.pdf', 'rb')  # Replace with your file path
+}
+        
+        files = [(
+    'files', open('/home/umang_gupta/mindsearch-pdf/SIA OM diversion strat.pdf', 'rb')  # Replace with your file path
+        )]
 
+#         multipart_data = {
+#     'data': json.dumps(data),  # Convert dict to JSON string
+#     'files': files['files']
+# }
+        
+        # raw_response = requests.post(url, files=multipart_data,timeout=20,stream=True)
+
+        raw_response = requests.post(url,
+                                     data=data,
+                                     files=files,
+                                     timeout=20,
+                                     stream=True
+                                    )
+        # print(raw_response.content)
         for resp in streaming(raw_response):
             agent_return, node_name = resp
             if node_name and node_name in ['root', 'response']:
@@ -307,12 +339,26 @@ def main():
     col1, col2 = st.columns([4, 1])
     with col1:
         user_input = st.chat_input('Enter your query:')
+        uploaded_files = st.file_uploader('Upload PDF files', type=['pdf'], accept_multiple_files=True)
     with col2:
         if st.button('Clear History'):
             clean_history()
     if user_input:
-        update_chat(user_input)
+        files = [('files', (file.name, file, file.type)) for file in uploaded_files] if uploaded_files else []
+        # files = [pdf_file for pdf_file in uploaded_files] if uploaded_files else []
+        # files = [('files', (pdf_file.name, pdf_file, 'application/pdf')) for pdf_file in uploaded_files] if uploaded_files else []
+        
+#         files = {
+#     pdf_file.name: {
+#         'file': pdf_file,
+#         'content_type': 'application/pdf'
+#     } for pdf_file in uploaded_files
+# } if uploaded_files else {}
+        
+        update_chat(user_input, files)
     display_chat_history()
+    
+    
 
 
 if __name__ == '__main__':

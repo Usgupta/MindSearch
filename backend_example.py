@@ -10,8 +10,19 @@ def get_response(query):
     # Prepare the input data
     data = {'inputs': [{'role': 'user', 'content': query}]}
     
+    files = [(
+'files', open('/home/umang_gupta/mindsearch-pdf/SIA OM diversion strat.pdf', 'rb')  # Replace with your file path
+    )]
+    
+    response = requests.post(url,
+                                     data=data,
+                                     files=files,
+                                     timeout=20,
+                                     stream=True
+                                    )
+    
     # Send the request to the backend
-    response = requests.post(url, headers=headers, data=json.dumps(data), timeout=20, stream=True)
+    # response = requests.post(url, headers=headers, data=json.dumps(data), timeout=20, stream=True)
     
     # Process the streaming response
     for chunk in response.iter_lines(chunk_size=8192, decode_unicode=False, delimiter=b'\n'):
@@ -30,5 +41,6 @@ def get_response(query):
 
 # Example usage
 if __name__ == '__main__':
+    # query = ""
     query = "What is the weather like today in New York?"
     get_response(query)
