@@ -70,7 +70,6 @@ st.title('MindSearch')
 
 
 # Function to update chat
-# Function to update chat
 def update_chat(query, files):
     with st.chat_message('user'):
         st.write(query)
@@ -80,41 +79,8 @@ def update_chat(query, files):
         history = None
         message = [dict(role='user', content=query)]
         
-        # print(message)
-        
-        # [{'role': 'user', 'content': 'sdfd'}]
-
         url = 'http://localhost:8002/solve'
-        # url = 'http://localhost:8002/submit1'
-        # headers = {'Content-Type': 'multipart/form-data'}
-        
-        headers ={'Content-Type': 'application/json'}
-        # 
-        # data={"inputs": "what is the best ", "agent_cfg": {"key1": "value1"}}
-        # data = {'inputs': message}
-        
-        
-        
-        data = {'inputs': [{'role': 'user', 'content': 'what is the best diverstion strategy'}]}
-        
-        # data = {"name": "foo", "point": 0.13, "is_accepted": False, "inputs": [{'role': 'user', 'content': 'sdfd'}]}
-        
-        # print(data)
-        
-        files = {
-    'files': open('/home/umang_gupta/mindsearch-pdf/SIA OM diversion strat.pdf', 'rb')  # Replace with your file path
-}
-        
-        files = [(
-    'files', open('/home/umang_gupta/mindsearch-pdf/SIA OM diversion strat.pdf', 'rb')  # Replace with your file path
-        )]
-
-#         multipart_data = {
-#     'data': json.dumps(data),  # Convert dict to JSON string
-#     'files': files['files']
-# }
-        
-        # raw_response = requests.post(url, files=multipart_data,timeout=20,stream=True)
+        data = {'inputs': message}
 
         raw_response = requests.post(url,
                                      data=data,
@@ -122,7 +88,7 @@ def update_chat(query, files):
                                      timeout=20,
                                      stream=True
                                     )
-        # print(raw_response.content)
+        
         for resp in streaming(raw_response):
             agent_return, node_name = resp
             if node_name and node_name in ['root', 'response']:
@@ -345,15 +311,6 @@ def main():
             clean_history()
     if user_input:
         files = [('files', (file.name, file, file.type)) for file in uploaded_files] if uploaded_files else []
-        # files = [pdf_file for pdf_file in uploaded_files] if uploaded_files else []
-        # files = [('files', (pdf_file.name, pdf_file, 'application/pdf')) for pdf_file in uploaded_files] if uploaded_files else []
-        
-#         files = {
-#     pdf_file.name: {
-#         'file': pdf_file,
-#         'content_type': 'application/pdf'
-#     } for pdf_file in uploaded_files
-# } if uploaded_files else {}
         
         update_chat(user_input, files)
     display_chat_history()

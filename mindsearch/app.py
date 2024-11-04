@@ -59,51 +59,14 @@ class GenerationParams(BaseModel):
     agent_cfg: Dict = dict()
     
 
-# def parse_json(data: str = Form(...)):
-#     try:
-#         return GenerationParams.model_validate_json(data)
-#     except ValidationError as e:
-#         raise HTTPException(
-#             detail=jsonable_encoder(e.errors()),
-#             status_code=422,
-#         )
-
-# @app.post("/submit1")
-# def submit(
-#     name: str = Form(...),
-#     point: float = Form(...),
-#     is_accepted: bool = Form(...),
-#     inputs: List = Form(...),
-#     files: List[UploadFile] = File(...),
-# ):
-#     return {
-#         "JSON Payload": {"name": name, "point": point, "is_accepted": is_accepted,"inputs":inputs},
-#         "Filenames": [file.filename for file in files],
-#     }
-
 @app.post('/solve')
 async def run(
     inputs: List = Form(...),
     files: List[UploadFile] = File(...),):
     
-    print({
-        "JSON Payload": {"inputs":inputs},
-        "Filenames": [file.filename for file in files],
-    })
-    
-    print(type(inputs))
-    
-    print(inputs)
-    
     inputs_json = ast.literal_eval(inputs[0])
     
     inputs[0] = inputs_json
-    
-    # print(inputs_json)
-    
-    # print({"inputs": params.inputs,
-    #     "agent_cfg": params.agent_cfg,
-    #     "filenames": [file.filename for file in files]})
 
     def convert_adjacency_to_tree(adjacency_input, root_name):
 

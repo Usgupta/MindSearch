@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 
 from lagent.actions import ActionExecutor, BingBrowser, PdfBrowser
-# from lagent.lagent.actions import ActionExecutor, BingBrowser
 
 import mindsearch.agent.models as llm_factory
 from mindsearch.agent.mindsearch_agent import (MindSearchAgent,
@@ -46,8 +45,9 @@ def init_agent(lang='cn', model_format='internlm_server',search_engine='DuckDuck
             plugin_executor=ActionExecutor(
                 PdfBrowser(searcher_type=search_engine,
                             topk=6,
-                            api_key=os.environ.get('WEB_SEARCH_API_KEY',
-                                                   'YOUR WEB SEARCH ENGINE API'),
+                            api_key=os.environ.get('QDRANT_API_KEY',
+                                                   'YOUR QDRANT API KEY'),
+                            qdrant_url = "https://e35c551a-872f-4fc6-a6c2-09fa72d4a587.us-east4-0.gcp.cloud.qdrant.io:6333",
                             files=files)),
             protocol=MindSearchProtocol(
                 meta_prompt=datetime.now().strftime(
