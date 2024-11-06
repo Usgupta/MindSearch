@@ -16,7 +16,7 @@ WORKDIR /app
 
 # 创建并激活 fastapi 环境，并安装依赖包
 RUN conda create --name fastapi python=3.10 -y && \
-    conda run -n fastapi pip install -r requirements.txt && \
+    conda run -n fastapi pip install --no-cache-dir -r requirements.txt && \
     conda clean --all -f -y
 
 # 暴露 FastAPI 默认端口

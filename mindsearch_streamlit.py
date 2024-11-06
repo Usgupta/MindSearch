@@ -79,7 +79,7 @@ def update_chat(query, files):
         history = None
         message = [dict(role='user', content=query)]
         
-        url = 'http://localhost:8002/solve'
+        url = 'http://mindsearch-production.up.railway.app:8002/solve'
         data = {'inputs': message}
 
         raw_response = requests.post(url,
