@@ -2,7 +2,6 @@ duckduckgo_search==5.3.1b1
 einops
 fastapi
 git+https://github.com/Usgupta/lagent.git
-gradio
 janus
 lmdeploy
 pyvis
@@ -11,3 +10,4 @@ termcolor
 transformers==4.41.0
 uvicorn
 python-dotenv
+PyPDF2
