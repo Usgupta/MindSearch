@@ -85,7 +85,7 @@ def update_chat(query, files):
         raw_response = requests.post(url,
                                      data=data,
                                      files=files,
-                                     timeout=20,
+                                     timeout=60,
                                      stream=True
                                     )
         
