@@ -2,7 +2,7 @@ import json
 import requests
 
 # Define the backend URL
-url = 'http://localhost:8002/solve'
+url = 'https://mindsearch-production.up.railway.app/solve'
 headers = {'Content-Type': 'application/json'}
 
 # Function to send a query to the backend and get the response
@@ -11,7 +11,7 @@ def get_response(query):
     data = {'inputs': [{'role': 'user', 'content': query}]}
     
     files = [(
-'files', open('/home/umang_gupta/mindsearch-pdf/SIA OM diversion strat.pdf', 'rb')  # Replace with your file path
+'files', open('/home/umang_gupta/mindsearch-pdf/MindSearch/20230417 MS Mar23 Load Factors Remain Strong Updating Model.pdf', 'rb')  # Replace with your file path
     )]
     
     response = requests.post(url,
