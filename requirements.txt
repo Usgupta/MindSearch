@@ -12,3 +12,4 @@ uvicorn
 python-dotenv
 PyPDF2
 qdrant-client
+python-multipart
