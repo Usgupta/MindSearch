@@ -66,7 +66,8 @@ if 'queries' not in st.session_state:
 
 # Set up page layout
 st.set_page_config(layout='wide')
-st.title('MindSearch')
+st.title('MindSearch with PDF!')
+st.subheader('Allow a few minutes to run the query!')
 
 
 # Function to update chat
